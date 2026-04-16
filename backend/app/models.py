@@ -1,6 +1,10 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Text, UniqueConstraint, Boolean
 from app.database import Base
+from django.db import models
+from django.utils import timezone
+from datetime import timedelta
+from django.conf import settings
 
 
 class User(Base):
@@ -78,3 +82,58 @@ class Notification(Base):
     link = Column(String(500), nullable=True)
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    
+from django.db import models
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
+
+
+class SocialAccount(models.Model):
+    PROVIDER_CHOICES = (
+        ("google", "Google"),
+        ("facebook", "Facebook"),
+        ("github", "GitHub"),
+    )
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="social_accounts")
+    provider = models.CharField(max_length=20, choices=PROVIDER_CHOICES)
+    provider_user_id = models.CharField(max_length=255)
+    email = models.EmailField()
+    extra_data = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("provider", "provider_user_id")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.provider}"
+
+
+class OTPLog(models.Model):
+    PURPOSE_CHOICES = (
+        ("login_signup", "Login / Signup"),
+    )
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    email = models.EmailField()
+    otp_code = models.CharField(max_length=10)
+    purpose = models.CharField(max_length=30, choices=PURPOSE_CHOICES, default="login_signup")
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
+    is_used = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    verified_at = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(minutes=5)
+        super().save(*args, **kwargs)
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    def __str__(self):
+        return f"{self.email} - {self.otp_code}"

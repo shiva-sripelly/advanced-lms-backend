@@ -1,0 +1,125 @@
+{
+  "info": {
+    "name": "LMS Authentication System",
+    "_postman_id": "8b3d2a90-5c0f-4e47-91fa-123456789111",
+    "description": "Postman collection for LMS Authentication System with OTP and social logins",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "OTP Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"shiva@example.com\",\n  \"full_name\": \"Shiva Sripelly\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/auth/otp/request",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8001",
+          "path": ["auth", "otp", "request"]
+        }
+      }
+    },
+    {
+      "name": "OTP Verify",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"shiva@example.com\",\n  \"otp\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/auth/otp/verify",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8001",
+          "path": ["auth", "otp", "verify"]
+        }
+      }
+    },
+    {
+      "name": "Google Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_token\": \"GOOGLE_ID_TOKEN_HERE\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/auth/google/login",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8001",
+          "path": ["auth", "google", "login"]
+        }
+      }
+    },
+    {
+      "name": "Facebook Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"access_token\": \"FACEBOOK_ACCESS_TOKEN_HERE\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/auth/facebook/login",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8001",
+          "path": ["auth", "facebook", "login"]
+        }
+      }
+    },
+    {
+      "name": "GitHub Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"access_token\": \"GITHUB_ACCESS_TOKEN_HERE\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/auth/github/login",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8001",
+          "path": ["auth", "github", "login"]
+        }
+      }
+    }
+  ]
+}
