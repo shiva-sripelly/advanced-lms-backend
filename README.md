@@ -216,3 +216,10 @@ Social login requires real provider tokens for live testing
 Swagger UI available at /docs
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@222
 Author : @Shiva Sripelly
+
+==========================
+Front_end
+==========================
+uvicorn app.main:app --reload --port 8001
+uvicorn app.main:app --reload --port 8002
+npm run dev
