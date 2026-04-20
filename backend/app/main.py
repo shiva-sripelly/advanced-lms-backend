@@ -16,6 +16,7 @@ from app.database import Base, engine
 from app.routers.attendance import router as attendance_router
 from app.routers.assignments import router as assignments_router
 from app.routers.notifications import router as notifications_router
+from app.routers.payments import router as payments_router
 from app.routes.auth_google import router as google_router
 from app.routes.auth_facebook import router as facebook_router
 from app.routes.auth_github import router as github_router
@@ -30,7 +31,6 @@ app = FastAPI(
     redoc_url=None,
 )
 
-# ✅ CORS FIX
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -42,16 +42,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ IMPORTANT: add prefixes
 app.include_router(attendance_router, prefix="/attendance", tags=["Attendance"])
 app.include_router(assignments_router, prefix="/assignments", tags=["Assignments"])
 app.include_router(notifications_router, prefix="/notifications", tags=["Notifications"])
+app.include_router(payments_router, prefix="/payments", tags=["Payments"])
 
-# Auth routes
 app.include_router(google_router, tags=["Auth"])
 app.include_router(facebook_router, tags=["Auth"])
 app.include_router(github_router, tags=["Auth"])
 app.include_router(otp_router, tags=["Auth"])
+
 
 @app.get("/")
 def root():

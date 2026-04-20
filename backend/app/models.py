@@ -1,12 +1,15 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Text, UniqueConstraint, Boolean
 from app.database import Base
+
 from django.db import models
-from django.utils import timezone
-from datetime import timedelta
 from django.conf import settings
+from django.utils import timezone
 
 
+# -----------------------------
+# SQLAlchemy models (existing LMS)
+# -----------------------------
 class User(Base):
     __tablename__ = "users"
 
@@ -82,13 +85,11 @@ class Notification(Base):
     link = Column(String(500), nullable=True)
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
-from datetime import timedelta
 
 
+# -----------------------------
+# Django models (auth + admin)
+# -----------------------------
 class SocialAccount(models.Model):
     PROVIDER_CHOICES = (
         ("google", "Google"),
@@ -137,3 +138,49 @@ class OTPLog(models.Model):
 
     def __str__(self):
         return f"{self.email} - {self.otp_code}"
+
+
+class PaymentTransaction(models.Model):
+    PAYMENT_TYPE_CHOICES = (
+        ("course", "Course"),
+        ("premium", "Premium Plan"),
+    )
+
+    STATUS_CHOICES = (
+        ("pending", "Pending"),
+        ("paid", "Paid"),
+        ("failed", "Failed"),
+        ("cancelled", "Cancelled"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="payment_transactions"
+    )
+    stripe_checkout_session_id = models.CharField(max_length=255, unique=True)
+    stripe_payment_intent_id = models.CharField(max_length=255, blank=True, null=True)
+
+    product_key = models.CharField(max_length=100)
+    payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
+    item_name = models.CharField(max_length=255)
+    course_id = models.IntegerField(blank=True, null=True)
+    plan_name = models.CharField(max_length=100, blank=True, null=True)
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=20, default="inr")
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    access_granted = models.BooleanField(default=False)
+
+    customer_email = models.EmailField(blank=True, null=True)
+    metadata = models.JSONField(default=dict, blank=True)
+
+    paid_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.item_name} - {self.status}"

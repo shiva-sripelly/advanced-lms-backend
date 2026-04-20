@@ -7,6 +7,12 @@ import DashboardPage from "./pages/DashboardPage";
 import AttendancePage from "./pages/AttendancePage";
 import AssignmentsPage from "./pages/AssignmentsPage";
 import NotificationsPage from "./pages/NotificationsPage";
+<<<<<<< HEAD
+=======
+import PaymentsPage from "./pages/PaymentsPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentCancelPage from "./pages/PaymentCancelPage";
+>>>>>>> 73c37ea (payment added)
 
 function AppLayout({ children }) {
   return (
@@ -67,6 +73,42 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+<<<<<<< HEAD
+=======
+
+          <Route
+            path="/payments"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PaymentsPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/payments/success"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PaymentSuccessPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/payments/cancel"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PaymentCancelPage />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+>>>>>>> 73c37ea (payment added)
         </Routes>
       </BrowserRouter>
     </AuthProvider>

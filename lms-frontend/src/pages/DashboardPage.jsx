@@ -38,7 +38,11 @@ export default function DashboardPage() {
             <div className="feature-card">Attendance management</div>
             <div className="feature-card">Assignments workflow</div>
             <div className="feature-card">Notification center</div>
+<<<<<<< HEAD
             <div className="feature-card">Protected dashboard routes</div>
+=======
+            <div className="feature-card">Stripe payments</div>
+>>>>>>> 73c37ea (payment added)
           </div>
         </div>
 
@@ -46,8 +50,13 @@ export default function DashboardPage() {
           <h2 className="section-title">Project Summary</h2>
           <p className="muted">
             Your frontend is now connected to separate auth and main FastAPI
+<<<<<<< HEAD
             services. This panel gives a clean presentation for demo and
             submission screenshots.
+=======
+            services. The LMS also supports Stripe Checkout for course purchases
+            and premium upgrades with Django admin transaction monitoring.
+>>>>>>> 73c37ea (payment added)
           </p>
           <div className="feature-grid" style={{ marginTop: "16px" }}>
             <div className="feature-card">Auth API → 8001</div>
